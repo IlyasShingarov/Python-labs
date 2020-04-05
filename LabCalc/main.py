@@ -234,8 +234,9 @@ menubar = tk.Menu(main)
 
 actionmenu = tk.Menu(menubar, tearoff=0)
 
-actionmenu.add_command(label="Перевести из 10ой в 3ную", command=show3)
-actionmenu.add_command(label="Перевести из 3ой в 10ную", command=show10)
+actionmenu.add_command(label="Перевести в другую СС", command=transform)
+actionmenu.add_command(label="Сделать отрицательным", command=makenegative)
+actionmenu.add_command(label="Сделать положительным", command=makepositive)
 
 menubar.add_cascade(label="Действия", menu=actionmenu)
 
