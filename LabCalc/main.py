@@ -105,12 +105,12 @@ def show10():
     error = 0
     if base_flag == 3 and len(field.get()) > 0:
         num = field.get()
-        for i in num:
-            if not num.isdigit:
+        try:
+            float(num)
+        except ValueError:
                 error = 1
                 mb.showerror('Ошибка', 'Введены неверные данные')
                 clear()
-                break
         for i in ('3', '4', '5', '6', '7', '8', '9'):
             if num.count(i) > 0:
                 error = 1
@@ -133,7 +133,7 @@ def show3():
     if base_flag == 10 and len(field.get()) > 0:
         num = field.get()
         for i in num:
-            if not i.isdigit():
+            if i is not '.' and not i.isdigit():
                 error = 1
                 mb.showerror('Ошибка', 'Введены неверные данные')
                 clear()
