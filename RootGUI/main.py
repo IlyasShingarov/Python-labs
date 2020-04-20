@@ -60,9 +60,9 @@ def refine(a, b, h, eps):
             x2 = b
 
         # Округление пренебрежимо малых значений
-        if abs(x1) < 1e-10:
+        if abs(x1) < 1e-16:
             x1 = float(0)
-        if abs(x2) < 1e-10:
+        if abs(x2) < 1e-16:
             x2 = float(0)
 
         # Значение функции на концах отрезка должны иметь разные знаки
@@ -70,7 +70,7 @@ def refine(a, b, h, eps):
             
             # Определение первого приближения методом хорд
             x = chords(x1, x2)
-            x_previous = 0 # Предыдущее приблежение, изначально 0 для входа в цикл
+            x_previous = x1 # Предыдущее приблежение
             iteration = 0 # Cчетчик кол-ва итераций
             error = '-' # Код ошибки
 
@@ -91,10 +91,11 @@ def refine(a, b, h, eps):
             })
         
         # Корень на границе интервала
-        elif f(x1) * f(x2) == 0:
-            error = '1'
+        elif f(x1) * f(x2) <= 1e-8:
+            #error = '1'
+            error = '-'
             iteration = '-'
-            if f(x1) == 0:
+            if abs(f(x1)) <= 1e-8:
                 x = x1
             else:
                 x = x2
@@ -107,6 +108,9 @@ def refine(a, b, h, eps):
                     'root': x,
                     'iteration': iteration,
                 })
+                
+            if abs(f(x2)) <= 1e-8:
+                x1 += h
 
         x1 += h # Шаг
 
@@ -170,7 +174,7 @@ def table(table_frame, data):
         table.insert("", 'end', text=i, values=(
             i,
             "[{:.4f};{:.4f}]".format(result["a"], result["b"]),
-            "{:.2e}".format(result["root"]),
+            "{:.7f}".format(result["root"]),
             "{:.0e}".format(f(result["root"])),
             result["iteration"],
             result["error"],
@@ -201,8 +205,9 @@ def f_plot(plot_frame, start, end):
     samples = 500 # Samles for graph
     derivative_samples = 50000 # Samles for derivative
 
-    x_scale = abs(max(start, end)) + 1
-
+    x_scale_max = abs(max(start, end)) + 1
+    x_scale_min = abs(min(start, end)) + 1
+                      
     # Graphing info
     x = np.linspace(start, end, samples)
     y = f(x)
@@ -237,21 +242,21 @@ def f_plot(plot_frame, start, end):
 
 
     # Plotting
-    figure = Figure(figsize=(14,5), dpi=75)
+    figure = Figure(figsize=(14,7), dpi=75)
     ax = figure.add_subplot(111)
     ax.set_xlabel('x', fontsize=18)
     ax.set_ylabel('y = f(x)', fontsize=18)
-    ax.set_title('График функции', fontsize=18)
+    ax.set_title('Function plot', fontsize=18)
 
-    ax.plot(x,x*0, color='black', label='Ось Х')
+    ax.plot(x,x*0, color='black', label='X axis')
 
-    ax.axis([-x_scale, x_scale, -y_scale_min, y_scale_max]) # Square plot
-    func_line, = ax.plot(x, y, label='Значение функции')
+    ax.axis([-x_scale_min, x_scale_max, -y_scale_min, y_scale_max]) # Square plot
+    func_line, = ax.plot(x, y, label='Function graph')
     ax.grid()
-    ax.scatter(crit_x, crit_y, color='red', label='Экстремум') # Critical points scatterplot
+    ax.scatter(crit_x, crit_y, color='red', label='Extremum') # Critical points scatterplot
 # ------------------------------------------------------------------------------ #
     idx = np.argwhere(np.diff(np.sign(f(dx) - dx*0))).flatten()
-    ax.plot(dx[idx], f(dx)[idx], 'yo', label='Корень')
+    ax.plot(dx[idx], f(dx)[idx], 'yo', label='Root')
 
     ax.legend()
 # ------------------------------------------------------------------------------ #
@@ -333,5 +338,9 @@ clear_button.grid(row=11, column=0)
 
 # ---------------------------------------------------------------- #
 
+'''
+error_label = tk.Label(data_in, text='Код ошибки:\n 1 - Корень на границе')
+error_label.grid(row=12, column=0)
+'''
 
 main.mainloop()
