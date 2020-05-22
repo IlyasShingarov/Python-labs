@@ -25,7 +25,7 @@ def mouse_circle(event):
         x, y = temp_coords
         rx, ry = get_radius(event, x, y)
         r = m.sqrt((rx - x)**2 + (ry - y)**2)
-        circle = image.create_oval(x - r, y - r, x + r, y + r, width=circle_width, outline=circle_color)
+        circle = image.create_oval(x - r, y - r, x + r, y + r, width=CIRCLE_WIDTH, outline=CIRCLE_COLOR)
         circle_state = 0
         
         circles.append((x, y, r))
@@ -43,12 +43,12 @@ def mouse_point(event):
     y = event.y
     points.append((x, y))
 
-    p1x = x - point_radius
-    p1y = y - point_radius
-    p2x = x + point_radius
-    p2y = y + point_radius
+    p1x = x - POINT_RADIUS
+    p1y = y - POINT_RADIUS
+    p2x = x + POINT_RADIUS
+    p2y = y + POINT_RADIUS
 
-    point = image.create_oval(p1x, p1y, p2x, p2y, fill=point_color, width=point_width)
+    point = image.create_oval(p1x, p1y, p2x, p2y, fill=POINT_COLOR, width=POINT_WIDTH)
 
 
 def changeFlag():
@@ -82,7 +82,7 @@ def put_circle():
             p2x = x + r
             p2y = y + r
 
-            circle = image.create_oval(p1x, p1y, p2x, p2y, width=circle_width, outline=circle_color)
+            circle = image.create_oval(p1x, p1y, p2x, p2y, width=CIRCLE_WIDTH, outline=CIRCLE_COLOR)
     except ValueError:
         pass
 
@@ -97,13 +97,13 @@ def put_point():
         elif (x, y) not in points:
             points.append((x, y))
 
-            p1x = x - point_radius
-            p1y = y - point_radius
+            p1x = x - POINT_RADIUS
+            p1y = y - POINT_RADIUS
 
-            p2x = x + point_radius
-            p2y = y + point_radius
+            p2x = x + POINT_RADIUS
+            p2y = y + POINT_RADIUS
 
-            point = image.create_oval(p1x, p1y, p2x, p2y, fill=point_color, width=point_width)
+            point = image.create_oval(p1x, p1y, p2x, p2y, fill=POINT_COLOR, width=POINT_WIDTH)
     except ValueError:
         pass
 
@@ -167,7 +167,7 @@ def max_line(AB):
 
 def make_line():
         AB = max(counted, key=max_line)
-        image.create_line(AB[0][0], AB[0][1], AB[1][0], AB[1][1], fill="#530F40", width=line_width)
+        image.create_line(AB[0][0], AB[0][1], AB[1][0], AB[1][1], fill="#530F40", width=LINE_WIDTH)
         print_lineinfo(AB)
 
 
@@ -186,14 +186,14 @@ temp_coords = ()
 circle_state = 0
 mode_flag = 0
 
-point_radius = 3
-point_width = 1
-point_color = "#171F26"
+POINT_RADIUS = 3
+POINT_WIDTH = 1
+POINT_COLOR = "#171F26"
 
-circle_width = 2
-circle_color = "#2C3740"
+CIRCLE_WIDTH = 2
+CIRCLE_COLOR = "#2C3740"
 
-line_width = 2
+LINE_WIDTH = 2
 
 
 # Инициализация основного окна
